@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" /> <! makes page look okay on all devices>
+    <style>
+        @media screen and (max-width: 800px) {
+            .left, .main, .right {
+                width: 100%; /* The width is 100%, when the viewport is 800px or smaller */
+            }
+        }
+    </style>
+    <title>My Quizzes | GeoSavvy Quizzes</title>
+    <link rel="stylesheet" href="mystyle.css">
+    <script src="script.js"></script>
+</head>
+
+<body style="background-color: #3a3a3a;">
+
+<div class="toolbar">
+
+    <img style="z-index: 1000000000000000; margin-top: -27px ; margin-right: -20px; margin-bottom: -17px; height: 150px;
+  width: auto; -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);" src="images/GeosavvyFalcon.PNG" alt="GeoSavvy Falcon Logo"/>
+    <div class="titleAndFSU">
+        <p class="geosavvyTitle">GeoSavvy</p>
+        <p class ="fsuTitle">Fairmont State University</p>
+    </div>
+
+    <div class="searchBarAndHelpAndProfileButtons">
+        <form class="searchBarForm" id = "searchBar">
+            <input class="searchBarInput" type="search" id="quizsearch" name="quizsearch" placeholder="Search a quiz...">
+        </form>
+
+        <span class = "helpAndProfileButtons ">
+            <div class="help-wrapper " style="position: relative;">
+                <button id="help-button" class="button helpAndProfileButtonStyle" style="height: 100%"> Need Help? </button>
+              </div>
+        <div class="profile-wrapper " style="position: relative;">
+           <button id="profile-button" class="button helpAndProfileButtonStyle" style="height: 100%">Profile</button>
+           <div id="profile-menu" style="display: none; position: absolute; right: 0; top: 100%; margin-top: 5px;
+                background-color: white; border: solid 1px #ccc; padding: 10px; border-radius: 5px; z-index: 9999;">
+             <p id="profile-username" style="margin: 0 0 10px 0;"></p>
+             <button id="logout-btn" style="padding: 5px 10px;">Log out</button>
+           </div>
+        </div>
+    </span>
+    </div>
+
+</div>
+
+<p class="cheaterBoxForBehindSidebar"></p>
+
+<aside>
+    <ul>
+        <li><a href="index.html"> Quizzes<img src="images/earth.png"/></a></li>
+        <li><a href="createquizpromptpage.html">Create<img src="images/add.png"/></a></li>
+        <li><a href="reviews.html"> Reviews<img src ="images/stars.png" /></a></li>
+        <li><a href="myquizzes.html"> My Quizzes<img style="margin-left: -32px" src ="images/clipboard.svg" /></a></li>
+    </ul>
+</aside>
+
+<main class="myQuizzesMainContent">
+    <div style="display: flex; flex-direction: column;" id="displayResults">
+        <!Will get filled in with JS.>
+    </div>
+
+</main>
+
+<div id="confirm-popup" class="help-popup">
+    <div style="background-color: gray; padding: 30px; border-radius: 10px; text-align: center; width: 350px;">
+        <h3 id="help-title">Are you sure you wish to delete this quiz?</h3>
+        <button id="yes-confirm-button">Yes</button>
+        <button id="no-confirm-button">No</button>
+    </div>
+</div>
+
+<div id="main-help-popup" class="help-popup">
+    <div style="background-color: gray; padding: 30px; border-radius: 10px; text-align: center; width: 350px;">
+        <h3 id="help-title">Need Help?</h3>
+
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 20px; margin: 0 auto; margin-bottom: 30px;">
+            <!Fill in with code.>
+            <button id="forgot-user-info" class="inner-help-btn">Forgot Username or Password?</button>
+            <button id="support-ticket-button" class="inner-help-btn">Submit a Support Ticket</button>
+            <button id="img-repo-button" class="inner-help-btn">Suggest Image for Repository</button>
+            <button id="third-party-quizzes" class="inner-help-btn">See List of Third-party Quizzes</button>
+            <button id="guidelines" class="inner-help-btn">Community Guidelines</button>
+            <button id="suggestion-button" class="inner-help-btn">Submit a Suggestion</button>
+        </div>
+
+        <button id="exit-help-button" onclick="document.getElementById('main-help-popup').style.display='none'" style="margin-top: 10px;">Exit</button>
+    </div>
+</div>
+
+<!Each individual popup for the help stuff.>
+<div id="forgot-user-info-popup" class="help-popup">
+  <div style="background-color: gray; padding: 30px; border-radius: 10px; text-align: center; width: 350px;">
+    <form id="forgot-user-info-form">
+      <h3 id="forgot-user-info-title" style="color: white;">Forgot username/password?</h3>
+      <input type="email" id="forgot-email" placeholder="Enter your email" required style="padding: 10px; margin-top: 10px; width: 80%;">
+      <br><br>
+      <button type="submit">Send Recovery Email</button>
+    </form>
+
+    <button id="exit-forgot-user-info-button" onclick="exitHelpWithText('forgot-user-info-popup', 'forgot-email')" style="margin-top: 10px;">Exit</button>
+  </div>
+</div>
+
+<div id="support-ticket-popup" class="help-popup">
+  <div style="background-color: gray; padding: 30px; border-radius: 10px; text-align: center; width: 400px;">
+    <form id="support-ticket-form">
+      <h3 id="support-ticket-title" style="color: white;">Submit a Support Ticket</h3>
+
+      <textarea id="supp-ticket-input" rows="10" cols="50"></textarea>
+      <br><br>
+      <button id="submit-ticket-input" type="submit">Submit Ticket</button>
+      <br><br>
+      (Maximum of 200 words)
+    </form>
+    <button id="exit-support-ticket-button" onclick="exitHelpWithText('support-ticket-popup', 'supp-ticket-input')" style="margin-top: 10px;">Exit</button>
+  </div>
+</div>
+
+<div id="img-repo-popup" class="help-popup">
+  <div style="background-color: gray; padding: 30px; border-radius: 10px; text-align: center; width: 350px;">
+    <form id="img-repo-form">
+      <h3 id="img-repo-title" style="color: white;">Image Suggestion?</h3>
+
+      <input type="url" id="img-repo-url" placeholder="Enter Image Repo URL" required style="padding: 10px; margin-top: 10px; width: 80%;">
+      <br><br>
+      <button type="submit">Submit Image Repository</button>
+    </form>
+    <button id="exit-img-repo-button" onclick="exitHelpWithText('img-repo-popup', 'img-repo-url')" style="margin-top: 10px;">Exit</button>
+  </div>
+</div>
+
+<div id="third-party-popup" class="help-popup">
+  <div style="background-color: gray; padding: 30px; border-radius: 10px; text-align: center; width: 350px;">
+    <h3 id="third-party-title" style="color: white;">List of Third-party Quizzes</h3>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+
+      Click the button to see a list of third party quizzes!
+      <button id="goto-third-party-btn" class="inner-help-btn" onclick="location.href='https://library.fairmontstate.edu/c.php?g=1425078&p=10573155'" style="margin-top: 10px;">
+        Click here!
+      </button>
+
+      <button id="exit-third-party-button" onclick="document.getElementById('third-party-popup').style.display='none'" style="margin-top: 10px;">Exit</button>
+    </div>
+  </div>
+</div>
+
+<div id="guidelines-popup" class="help-popup">
+  <div style="background-color: gray; padding: 30px; border-radius: 10px; text-align: center; width: 750px; height: 600px;">
+    <h2 id="guideline-title" style="color: white;">Community Guidelines</h2>
+    <div style="display: flex; align-items: stretch; justify-content: center; padding: 30px; border-radius: 10px; margin: auto; margin-bottom: 20px;">
+      <div class="guideline-left">
+        <h3 style="color: white;">1. Be Respectful</h3>
+        Treat others with kindness and respect.
+        No hate speech, harassment, or discrimination.
+        <h3 style="color: white;">2. Keep Content Appropriate</h3>
+        Quizzes must be suitable for all ages.
+        No offensive, political, or inappropriate content.
+        <h3 style="color: white;">3. Create Quality Quizzes</h3>
+        Ensure quizzes are accurate, relevant, and well-structured.
+        Avoid misleading titles or incorrect information.
+      </div>
+
+      <div class="guideline-divider"></div>
+
+      <div class="guideline-right">
+        <h3 style="color: white;">4. Give Constructive Reviews</h3>
+        Rate quizzes fairly (1–5 stars) based on content and experience.
+        Use reviews to offer helpful feedback
+        <h3 style="color: white;">5. No Spam or Plagiarism</h3>
+        Don’t copy content from others without credit.
+        Avoid repetitive or promotional content.
+        <h3 style="color: white;">6. Follow the Rules</h3>
+        Repeated violations may result in content removal or account suspension.
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <button id="exit-guideline-button" onclick="document.getElementById('guidelines-popup').style.display='none'" style="margin-top: 10px;">Exit</button>
+      Let's keep exploring the world - respectfully and together!
+    </div>
+  </div>
+</div>
+
+<div id="suggestion-popup" class="help-popup">
+  <div style="background-color: gray; padding: 30px; border-radius: 10px; text-align: center; width: 400px;">
+    <form id="suggestion-form">
+      <h3 id="suggestion-title" style="color: white;">Submit a Suggestion!</h3>
+
+      <textarea id="suggestion-input" rows="10" cols="50"></textarea>
+      <br><br>
+      <button id="submit-suggestion-input" type="submit">Submit Suggestion</button>
+      <br><br>
+      (Maximum of 200 words)
+    </form>
+    <button id="exit-suggestion-button" onclick="exitHelpWithText('suggestion-popup', 'suggestion-input')" style="margin-top: 10px;">Exit</button>
+  </div>
+</div>
+
+</body>
+
+<script>
+
+    // Get the current page's URL (assuming you're on a simple single-page app or similar)
+    const currentPageUrl = window.location.href;
+    console.log(currentPageUrl)
+
+    // Find all the navigation links
+    const navLinks = document.querySelectorAll("li");
+    console.log(navLinks)
+
+    // Loop through each link
+    navLinks.forEach((link) => {
+        // Check if the link's URL matches the current page
+        if (link.firstChild.href === currentPageUrl) {
+            // Add a class to the link
+            link.classList.add("current");
+        }
+    });
+
+</script>
+</html>

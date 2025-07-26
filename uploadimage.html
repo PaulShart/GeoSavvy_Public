@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Image Upload</title>
+</head>
+<body>
+<h2>Upload an Image</h2>
+<form id="uploadForm" enctype="multipart/form-data">
+  <label>Image File:</label><br>
+  <input type="file" name="file" required><br><br>
+  <label>Tags (comma-separated):</label><br>
+  <input type="text" name="tags" id="tags"><br><br>
+  <input type="submit" value="Upload">
+</form>
+
+<hr>
+<h3>Delete a Quiz</h3>
+<form id="deleteQuizForm">
+  <label>Quiz ID to Delete: (Quiz ID can be found in the URL of the quiz overview page.)</label><br>
+  <input type="number" id="delete-quiz-id" required><br><br>
+  <button type="submit">Delete Quiz</button>
+</form>
+<p id="delete-result"></p>
+
+
+<p id="result"></p>
+
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (!user || !user.user_ID) {
+      alert("You must be logged in to access this page.");
+      window.location.href = "index.html";
+      return;
+    }
+
+    try {
+      const res = await fetch(`http://18.212.28.50:5000/check-admin/${user.user_ID}`);
+      const data = await res.json();
+
+      if (!res.ok || !data.is_admin) {
+        window.location.href = "index.html";
+      }
+    } catch (err) {
+      console.error("Error checking admin status:", err);
+      window.location.href = "index.html";
+    }
+  });
+</script>
+
+
+<script>
+  document.getElementById("uploadForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user || !user.user_ID) {
+      alert("You must be logged in to upload.");
+      window.location.href = "index.html";
+      return;
+    }
+
+    const formData = new FormData(this);
+    formData.append("user_ID", user.user_ID);
+
+    fetch("http://18.212.28.50:5000/upload-image", {
+      method: "POST",
+      body: formData
+    })
+      .then(res => res.json())
+      .then(data => {
+      document.getElementById("result").innerText = data.message || data.error;
+    })
+      .catch(err => {
+      document.getElementById("result").innerText = "Upload failed.";
+      console.error(err);
+    });
+  });
+</script>
+<script>
+  document.getElementById("deleteQuizForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const quizId = document.getElementById("delete-quiz-id").value;
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (!user || !user.user_ID) {
+      alert("You must be logged in.");
+      return;
+    }
+
+    fetch("http://18.212.28.50:5000/my-quizzes/delete-quiz", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ quiz_id: quizId })
+    })
+      .then(res => res.json())
+      .then(data => {
+      document.getElementById("delete-result").innerText = data.message || data.error;
+    })
+      .catch(err => {
+      console.error("Error deleting quiz:", err);
+      document.getElementById("delete-result").innerText = "Failed to delete quiz.";
+    });
+  });
+</script>
+
+</body>
+</html>
